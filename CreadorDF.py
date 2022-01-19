@@ -85,6 +85,8 @@ class CreadorDF:
         '''
         return tabla
     
+    
+    
     def creadorDFTrain(self,pathOdio, pathNoOdio):
         filesOdio = os.listdir(pathOdio)
         filesNoOdio = os.listdir(pathNoOdio)
