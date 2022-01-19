@@ -1,11 +1,14 @@
 from argparse import Action
 from cgitb import enable, text
+from ctypes import sizeof
+from ctypes.wintypes import SIZE
 from faulthandler import disable
 import os
 import tkinter as tk 
 from tkinter import ttk
 from tkinter import *
 from tkinter import filedialog
+from tkinter import font
 from turtle import left
 import numpy as np
 import pandas as pd
@@ -23,7 +26,8 @@ from sklearn import linear_model
 from sklearn.feature_extraction.text import TfidfVectorizer
 import re
 from CreadorDF import CreadorDF
-from decisiontree import decisiontree
+from TRAIN import *
+
 
 
 
@@ -38,7 +42,7 @@ def abrir_dir():
         os.chdir(directorio)
   
 
-    return os.getcwd()
+    return directorio
 
 def abrirarchivo(x):
 
@@ -53,15 +57,15 @@ def abrirarchivo(x):
 
     return x
 
-def carpeta(x):
+def carpeta(x,dir):
 
     dir=abrir_dir()
     x.delete(0,"end")
     x.insert(0,dir)
     x.textvariable=dir
 
-  
-    return x
+    
+    return x,dir
 
 def activarbtn(Bseleccionarmodeloclasificador):
 
@@ -74,14 +78,15 @@ def activarbtn(Bseleccionarmodeloclasificador):
 
 def ejecutar(x,rutaOdio,rutaNoOdio):
 
-    if x=="Decision Tree":
-        y=decisiontree(rutaOdio,rutaNoOdio)
-    elif x=="supportvectormachinegenmodel":
-        y=supportvectormachinegenmodel(rutaOdio,rutaNoOdio)
-    elif x=="NaiveBayesgenmodel":
-        y=NaiveBayesgenmodel(rutaOdio,rutaNoOdio)
+    algoritmo=TRAIN()
 
-    return 0
+
+    clf,matrizdis,preci,listapalabra=algoritmo.Train(rutaOdio,rutaNoOdio,x)
+
+
+
+
+    return clf,matrizdis,preci,listapalabra
 
 
 
@@ -93,8 +98,8 @@ root = Tk()
 #interfaz 
 root.title("APP CLASIFICADORA")
 
-root.geometry('740x400')
-root.resizable(0,0)
+root.geometry('740x500')
+root.resizable(1,1)
 
 nb=ttk.Notebook(root)
 nb.pack(fill='both',expand=YES)
@@ -103,7 +108,8 @@ nb.pack(fill='both',expand=YES)
 p1=ttk.Frame(nb)
 p2=ttk.Frame(nb)
 
-
+RutanoticiasOdio=os.getcwd()+"\\Odio"
+RutanoticiasNOOdio=os.getcwd()+"\\NoOdio"
 
 #elementos entrenamiento
 
@@ -113,36 +119,53 @@ LnoticiasOdioEntreno.place(relx=0.1,rely=0.1 , anchor=CENTER)
 LnoticiasNoOdioEntreno=Label(p1,text='Noticias No Odio:')
 LnoticiasNoOdioEntreno.place(relx=0.1,rely=0.2 , anchor=CENTER)
 
-RutanoticiasOdio = StringVar()
-LnoticiasOdioEntrenoruta=Entry(p1,text='ruta',width = 60, textvariable=RutanoticiasOdio )
+RutanoticiasOdiolabel = StringVar()
+LnoticiasOdioEntrenoruta=Entry(p1,text='ruta',width = 60, textvariable=RutanoticiasOdiolabel )
 LnoticiasOdioEntrenoruta.place(height=19,relx=0.5,rely=0.1,anchor=CENTER)
 
 
-BnoticiasOdioEntrenoruta=Button(p1,text="Abrir",command=lambda:carpeta(LnoticiasOdioEntrenoruta))
+BnoticiasOdioEntrenoruta=Button(p1,text="Abrir",command=lambda:carpeta(LnoticiasOdioEntrenoruta,RutanoticiasOdio))
 BnoticiasOdioEntrenoruta.place(relx=0.9,rely=0.1,anchor=CENTER)
 
 
-RutanoticiasNOOdio = StringVar()
-LnoticiasNoOdioEntrenoboton=Entry(p1,text='ruta',width = 60, textvariable=RutanoticiasNOOdio)
+RutanoticiasNOOdiolabel = StringVar()
+LnoticiasNoOdioEntrenoboton=Entry(p1,text='ruta',width = 60, textvariable=RutanoticiasNOOdiolabel)
 LnoticiasNoOdioEntrenoboton.place(height=19,relx=0.5,rely=0.2,anchor=CENTER)
 
-BnoticiasNoOdioEntrenoruta=Button(p1,text="Abrir",command=lambda:carpeta(LnoticiasNoOdioEntrenoboton))
+BnoticiasNoOdioEntrenoruta=Button(p1,text="Abrir",command=lambda:carpeta(LnoticiasNoOdioEntrenoboton,RutanoticiasNOOdio))
 BnoticiasNoOdioEntrenoruta.place(relx=0.9,rely=0.2,anchor=CENTER)
 
 OptionList = [
-"generalizedlinearmodelgenmodel",
-"supportvectormachinegenmodel",
-"NaiveBayesgenmodel",
+"Decision Tree",
+"SVM",
+"Naive Bayes",
 
 ] 
 
 variable = tk.StringVar(root)
 variable.set(OptionList[0])
 
-opt = tk.OptionMenu(root, variable, *OptionList)
+opt = tk.OptionMenu(p1, variable, *OptionList)
 opt.config(width=40)
-opt.place(relx=0.3,rely=0.4,anchor=CENTER)
+opt.place(relx=0.3,rely=0.3,anchor=CENTER)
 
+
+ejecutartrain=Button(p1,text="Ejecutar",command=lambda:ejecutar(variable,RutanoticiasOdio,RutanoticiasNOOdio))
+ejecutartrain.place(relx=0.9,rely=0.4,anchor=CENTER)
+
+
+
+
+#recuadro con la info
+informacionalgoritmo=Frame(p1)
+informacionalgoritmo.config(width=300,height=130,background="white",relief=tk.FLAT,bd=20,highlightthickness=4) 
+informacionalgoritmo.place(relx=0.3,rely=0.5,anchor=CENTER)
+
+Lvistaprevia=Label(informacionalgoritmo,text="VISTA PREVIA:",font=('Arial',9)).place(relx=0.1,rely=0,anchor=CENTER)
+Lvistaprevia1=Label(informacionalgoritmo,text="Ejemplares odio:",font=('Arial',7)).place(relx=0.1,rely=0.2,anchor=W)
+Lvistaprevia2=Label(informacionalgoritmo,text="Ejemplares No odio:",font=('Arial',7)).place(relx=0.1,rely=0.4,anchor=W)
+Lvistaprevia3=Label(informacionalgoritmo,text="Total:",font=('Arial',7)).place(relx=0.1,rely=0.6,anchor=W)
+Lvistaprevia4=Label(informacionalgoritmo,text="Algoritmo seleccionado:",font=('Arial',7)).place(relx=0.1,rely=0.8,anchor=W)
 
 #elementos clasificacion
 

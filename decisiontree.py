@@ -43,14 +43,14 @@ class decisiontree:
         clf = tree.DecisionTreeClassifier()
         clf = clf.fit(dfTotal["data"],dfTotal["Odio"])
 
-        pred = clf.predict(array)
+        pred = clf.predict(dfTotal["data"])
         print(pred.tolist())
 
 
         print(f1_score(dfTotal["Odio"],pred,average='micro'))
 
 
-    return 0
+        return 0
 
 
 
