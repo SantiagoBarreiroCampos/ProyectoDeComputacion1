@@ -92,7 +92,6 @@ class CreadorDF:
         filesNoOdio = os.listdir(pathNoOdio)
         files = filesOdio+filesNoOdio
         arrayNoticias = []
-        
         for file in filesOdio:
             file_path = os.path.join(pathOdio, file)
             if os.path.isfile(file_path):

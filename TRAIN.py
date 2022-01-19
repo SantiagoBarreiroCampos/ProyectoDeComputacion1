@@ -24,5 +24,6 @@ def EntrenarSVM():
 
 
 paths = [os.getcwd() + "\\Odio", os.getcwd() + "\\NoOdio", os.getcwd() + "\\Unlabeled"]
-dfEntrenamiento = dataFrameEntrenamiento(paths[0], paths[1])
+dfEntrenamiento, listapalabras = dataFrameEntrenamiento(paths[0], paths[1])
 
+print(dfEntrenamiento)
