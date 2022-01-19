@@ -22,64 +22,9 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn import linear_model
 from sklearn.feature_extraction.text import TfidfVectorizer
 import re
+from CreadorDF import CreadorDF
+from decisiontree import decisiontree
 
-
-
-root = Tk()
-
-
-def generateDF(path):
-    
-    df = pd.DataFrame({"name": [], "path": [], "content":[]})
-    files = os.listdir(path)
-    for file in files:
-        file_path = os.path.join(path, file)
-        
-
-        
-        if os.path.isfile(file_path):
-            with open(file_path, 'r', encoding="ISO 8859-1") as f:
-                
-                spiltfile=f.read();
-                splitedcontent = spiltfile.split("#####")#0=link 1=autor 2=fecha 3=titulo 4=content
-                #juntar title y content           #####
-                content=splitedcontent[3]+" "+splitedcontent[4]+" "+splitedcontent[5]
-                
-                
-                df = df.append({"name": file, "path": file_path,"content":content }, ignore_index=True)
-        elif os.path.isdir(file_path):
-            df = df.append(generateDF(file_path))
-            
-
-            
-            
- 
-    
-    
-    return df
-
-def tokenize(x):
-    return RegexpTokenizer(r'\w+').tokenize(x.lower())
-
-def removeStopwords(x):
-    z=["prueba"]
-    with open("listaParadaEsp.txt") as f:
-        text = f.read()
-        prohibitedWords = text.split("\n")
-        
-        y=[word for word in x if not word in prohibitedWords]
-        
-        for word in y:
-            word = re.sub("(\d+)","",word)
-            z = np.append(z, word)
-                
-        return z
-
-def stemming(x):
-    
-    stemmer = SnowballStemmer(language="spanish")
-    
-    return ' '.join([stemmer.stem(word)for word in x])
 
 
 
@@ -124,54 +69,17 @@ def activarbtn(Bseleccionarmodeloclasificador):
 
     return 1
 
-def generalizedlinearmodelgenmodel(rutaOdio,rutaNoOdio):
-
-    dfOdio=generateDF(rutaOdio)
-    dfNoOdio=generateDF(rutaNoOdio)
-
-    x=dfOdio['content'].map(tokenize)
-    x=x.map(removeStopwords)
-    x=x.map(stemming)
-    vectorizerx = TfidfVectorizer()
-    X = vectorizerx.fit_transform(x)
-    nombresx = vectorizerx.get_feature_names()
-    arrayx = X.toarray()
-
-
-    y=dfNoOdio['content'].map(tokenize)
-    y=y.map(removeStopwords)
-    y=y.map(stemming)
-    vectorizery = TfidfVectorizer()
-    Y = vectorizery.fit_transform(y)
-    nombresy = vectorizery.get_feature_names()
-    arrayy = Y.toarray()
 
 
 
+def ejecutar(x,rutaOdio,rutaNoOdio):
 
-
-
-
-    tablaNoOdio = pd.DataFrame(data = arrayy,columns=nombresy)
-    tablaOdio = pd.DataFrame(data = arrayx,columns=nombresx)
-
-
-
-    clf = linear_model.LinearRegression().fit(tablaNoOdio,tablaOdio)
-  
-
-
-    return 0
-
-def supportvectormachinegenmodel(rutaA,rutaB):
-
-
-
-    return 0
-
-def NaiveBayesgenmodel(rutaA,rutaB):
-
-
+    if x=="Decision Tree":
+        y=decisiontree(rutaOdio,rutaNoOdio)
+    elif x=="supportvectormachinegenmodel":
+        y=supportvectormachinegenmodel(rutaOdio,rutaNoOdio)
+    elif x=="NaiveBayesgenmodel":
+        y=NaiveBayesgenmodel(rutaOdio,rutaNoOdio)
 
     return 0
 
@@ -180,10 +88,7 @@ def NaiveBayesgenmodel(rutaA,rutaB):
 
 
 
-
-
-
-
+root = Tk()
 
 #interfaz 
 root.title("APP CLASIFICADORA")
