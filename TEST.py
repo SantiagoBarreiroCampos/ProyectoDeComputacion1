@@ -4,20 +4,26 @@ Created on Wed Jan 19 19:11:12 2022
 
 @author: Yago
 """
+from CreadorDF import CreadorDF
 
 class TEST:
     
-    def Test(self, pathUnlabeled, pathNoOdio, algoritmo):
-        '''
-        #paths = [os.getcwd() + "\\Odio", os.getcwd() + "\\NoOdio", os.getcwd() + "\\Unlabeled"]
-        dfEntrenamiento, listapalabras = self.dataFrameEntrenamiento(pathOdio, pathNoOdio)
-        
-        if algoritmo == "SVM":
-            CLF, matrix = self.EntrenarSVM(dfEntrenamiento)
-        elif algoritmo == "Naive Bayes":
-            CLF, matrix = self.EntrenarNaiveBayes(dfEntrenamiento)
-        elif algoritmo == "Decision Tree":
-            CLF, matrix = self.EntrenarDecisionTree(dfEntrenamiento)
+    def dataFrameTest(self, pathUnlabeled, listapalabras):
+        creador = CreadorDF()
+        tablaTest = creador.creadorDFTest(pathUnlabeled, listapalabras)
+        return tablaTest
     
-        return CLF, matrix, listapalabras
-        '''
+    def Test(self, pathUnlabeled, algoritmo, listapalabras):
+        
+        dfTest = self.dataFrameTest(pathUnlabeled, listapalabras)
+        
+        categorias = []
+        for categoria in algoritmo.predict(dfTest):
+            if categoria == 1:
+                categorias.append("Odio")
+            elif categoria == 0:
+                categorias.append("NoOdio")
+                
+        dfTest.insert(0, "CATEGORIA", categorias, True)
+        #print(dfTest)
+        return dfTest

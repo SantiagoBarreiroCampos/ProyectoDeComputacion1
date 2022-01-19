@@ -38,7 +38,9 @@ class CreadorDF:
         stemmer = SnowballStemmer(language="spanish")
         return ' '.join([stemmer.stem(word)for word in noticia])
     
-    def creadorDFTest(self,pathUnlabeled):
+    
+    
+    def creadorDFTest(self, pathUnlabeled, listapalabras):
         files = os.listdir(pathUnlabeled)
         arrayNoticias = []
         
@@ -66,23 +68,13 @@ class CreadorDF:
         #print(noticiasStem[0])
         
         vectorizer = TfidfVectorizer()
-        vectorNoticias = vectorizer.fit_transform(noticiasStem)
+        vectorizer.fit(listapalabras) # aqui se introduce la lista de palabras
+        vectorNoticias = vectorizer.transform(noticiasStem)
         palabras = vectorizer.get_feature_names()
         array = vectorNoticias.toarray()
         
         tabla = pd.DataFrame(data = array, index = files, columns = palabras)
-        '''
-        index = tabla.index
-        i=0;
-        categorias = []
-        for nombreArchivo in index:
-            if "NoOdio" in nombreArchivo:
-                categorias.append("NoOdio")
-            else:
-                categorias.append("Odio")
-            i+=1 
-        tabla.insert(0, "CATEGORIA", categorias, True)
-        '''
+        
         return tabla
     
     
@@ -145,15 +137,3 @@ class CreadorDF:
         tabla.insert(0, "CATEGORIA", categorias, True)
         
         return tabla, palabras
-        
-    '''
-    def creador_init(self, path):
-        #paths = [os.getcwd() + "\\Odio", os.getcwd() + "\\NoOdio"] #Categorias a revisar, mirar que esten asi en el periodico (url)
-        tabla = self.creadorDF(path) #Tiene que ser en minuscula
-        #print(tablaOdio)
-        #tablaNoOdio = self.creadorDF(paths[1])
-        return tabla
-    '''
-    
-
-#json_final = scrapeo_init() #Tiene que ser en minuscula

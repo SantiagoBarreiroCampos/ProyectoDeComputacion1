@@ -4,15 +4,15 @@ Created on Wed Jan 19 15:03:57 2022
 
 @author: Yago
 """
-import os
+#import os
 from CreadorDF import CreadorDF
 
 from sklearn.model_selection import train_test_split
-from sklearn import datasets
+#from sklearn import datasets
 from sklearn import svm
 from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import confusion_matrix
-from sklearn.metrics import accuracy_score
+#from sklearn.metrics import accuracy_score
 from sklearn import tree
 
 
@@ -34,7 +34,7 @@ class TRAIN:
         precision = clf.score(X_test, y_test)*100
         print("Matriz de confusion SVM:")
         print(matriz)
-        print("Precision SVM: "+str(precision)+"%")
+        print("Precision SVM: "+str(round(precision, 2))+"%")
         return clf, matriz, precision
     
     def EntrenarNaiveBayes(self, dfEntrenamiento):
@@ -49,7 +49,7 @@ class TRAIN:
         
         print("Matriz de confusion Naive Bayes:")
         print(matriz)
-        print("Precision Naive Bayes: "+str(precision)+"%")
+        print("Precision Naive Bayes: "+str(round(precision, 2))+"%")
         return gnb, matriz, precision
     
     def EntrenarDecisionTree(self, dfEntrenamiento):
@@ -64,7 +64,7 @@ class TRAIN:
         
         print("Matriz de confusion Decision Tree:")
         print(matriz)
-        print("Precision Decision Tree: "+str(precision)+"%")
+        print("Precision Decision Tree: "+str(round(precision, 2))+"%")
         return clf, matriz, precision
     
     def Train(self, pathOdio, pathNoOdio, algoritmo):
