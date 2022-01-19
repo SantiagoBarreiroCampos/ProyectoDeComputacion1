@@ -5,9 +5,6 @@ import os
 import tkinter as tk 
 from tkinter import ttk
 from tkinter import *
-
-
-
 from tkinter import filedialog
 from turtle import left
 import numpy as np
