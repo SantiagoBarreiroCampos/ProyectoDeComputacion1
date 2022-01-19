@@ -24,56 +24,59 @@ class TRAIN:
         return tablaTrain, palabras
     
     def EntrenarSVM(self, dfEntrenamiento):
-        X = dfEntrenamiento
+        X = dfEntrenamiento.drop(columns="CATEGORIA")
         y = dfEntrenamiento.iloc[:, 0]
         
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_state=0)
         
         clf = svm.SVC(kernel='linear', C=1).fit(X_train, y_train)
         matriz = confusion_matrix(y_test, clf.predict(X_test))
+        precision = clf.score(X_test, y_test)*100
         print("Matriz de confusion SVM:")
         print(matriz)
-        print("Precision SVM: "+str(clf.score(X_test, y_test)*100)+"%")
-        return clf, matriz
+        print("Precision SVM: "+str(precision)+"%")
+        return clf, matriz, precision
     
     def EntrenarNaiveBayes(self, dfEntrenamiento):
-        X = dfEntrenamiento
+        X = dfEntrenamiento.drop(columns="CATEGORIA")
         y = dfEntrenamiento.iloc[:, 0]
         
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_state=0)
         
         gnb = GaussianNB().fit(X_train, y_train)
         matriz = confusion_matrix(y_test, gnb.predict(X_test))
+        precision = gnb.score(X_test, y_test)*100
         
         print("Matriz de confusion Naive Bayes:")
         print(matriz)
-        print("Precision Naive Bayes: "+str(gnb.score(X_test, y_test)*100)+"%")
-        return gnb, matriz
+        print("Precision Naive Bayes: "+str(precision)+"%")
+        return gnb, matriz, precision
     
     def EntrenarDecisionTree(self, dfEntrenamiento):
-        X = dfEntrenamiento
+        X = dfEntrenamiento.drop(columns="CATEGORIA")
         y = dfEntrenamiento.iloc[:, 0]
         
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_state=0)
         
         clf = tree.DecisionTreeClassifier().fit(X_train, y_train)
         matriz = confusion_matrix(y_test, clf.predict(X_test))
+        precision = clf.score(X_test, y_test)*100
         
         print("Matriz de confusion Decision Tree:")
         print(matriz)
-        print("Precision Decision Tree: "+str(clf.score(X_test, y_test)*100)+"%")
-        return clf, matriz
+        print("Precision Decision Tree: "+str(precision)+"%")
+        return clf, matriz, precision
     
     def Train(self, pathOdio, pathNoOdio, algoritmo):
         #paths = [os.getcwd() + "\\Odio", os.getcwd() + "\\NoOdio", os.getcwd() + "\\Unlabeled"]
         dfEntrenamiento, listapalabras = self.dataFrameEntrenamiento(pathOdio, pathNoOdio)
         
         if algoritmo == "SVM":
-            CLF, matrix = self.EntrenarSVM(dfEntrenamiento)
+            CLF, matrix, precision = self.EntrenarSVM(dfEntrenamiento)
         elif algoritmo == "Naive Bayes":
-            CLF, matrix = self.EntrenarNaiveBayes(dfEntrenamiento)
+            CLF, matrix, precision = self.EntrenarNaiveBayes(dfEntrenamiento)
         elif algoritmo == "Decision Tree":
-            CLF, matrix = self.EntrenarDecisionTree(dfEntrenamiento)
+            CLF, matrix, precision = self.EntrenarDecisionTree(dfEntrenamiento)
     
-        return CLF, matrix, listapalabras
+        return CLF, matrix, precision, listapalabras
     #print(dfEntrenamiento)

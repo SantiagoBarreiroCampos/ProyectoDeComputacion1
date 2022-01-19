@@ -10,11 +10,12 @@ from TRAIN import TRAIN
 entrenamiento = TRAIN()
 
 paths = [os.getcwd() + "\\Odio", os.getcwd() + "\\NoOdio"]
-algoritmo = "SVM"
+algoritmo = "Naive Bayes"
 
-clf, matriz, palabras = entrenamiento.Train(paths[0], paths[1], algoritmo)
+clf, matriz, precision, palabras = entrenamiento.Train(paths[0], paths[1], algoritmo)
 #tabla, palabras = creador.creadorDF(paths[0], paths[1])
 
 print("\n----------DEVUELTO----------\n")
 print(matriz)
+print(precision)
 #print(palabras)
