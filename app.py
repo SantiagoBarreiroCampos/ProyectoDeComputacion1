@@ -76,11 +76,17 @@ def activarbtn(Bseleccionarmodeloclasificador):
 
 
 
-def ejecutar(x,rutaOdio,rutaNoOdio):
+def ejecutar(x,rutaOdio,rutaNoOdio,informacionalgoritmo):
+
+    LNejemplaresOdio=Label(informacionalgoritmo,text=len([name for name in os.listdir(rutaOdio)]),font=('Arial',7)).place(relx=0.6,rely=0.2,anchor=W)
+    LNejemplaresNoOdio=Label(informacionalgoritmo,text=len([name for name in os.listdir(rutaNoOdio)]),font=('Arial',7)).place(relx=0.6,rely=0.4,anchor=W)
+    LNtotal=Label(informacionalgoritmo,text=(len([name for name in os.listdir(rutaOdio)])+len([name for name in os.listdir(rutaNoOdio)])),font=('Arial',7)).place(relx=0.6,rely=0.6,anchor=W)
+    Lalgoritmo=Label(informacionalgoritmo,text=x,font=('Arial',7)).place(relx=0.6,rely=0.8,anchor=W)
+
+
+
 
     algoritmo=TRAIN()
-
-
     clf,matrizdis,preci,listapalabra=algoritmo.Train(rutaOdio,rutaNoOdio,x)
 
 
@@ -89,8 +95,9 @@ def ejecutar(x,rutaOdio,rutaNoOdio):
     return clf,matrizdis,preci,listapalabra
 
 
-
-
+def callbackalgoritmo(*args):
+    print(variablealgoritmo.get())
+    return 1
 
 
 root = Tk()
@@ -99,7 +106,7 @@ root = Tk()
 root.title("APP CLASIFICADORA")
 
 root.geometry('740x500')
-root.resizable(1,1)
+root.resizable(0,0)
 
 nb=ttk.Notebook(root)
 nb.pack(fill='both',expand=YES)
@@ -142,21 +149,33 @@ OptionList = [
 
 ] 
 
-variable = tk.StringVar(root)
-variable.set(OptionList[0])
 
-opt = tk.OptionMenu(p1, variable, *OptionList)
+
+
+
+variablealgoritmo = tk.StringVar(p1)
+variablealgoritmo.set(OptionList[0])
+
+
+
+opt = tk.OptionMenu(p1, variablealgoritmo, *OptionList)
 opt.config(width=40)
 opt.place(relx=0.3,rely=0.3,anchor=CENTER)
+variablealgoritmo.trace("w", callbackalgoritmo)
 
 
-ejecutartrain=Button(p1,text="Ejecutar",command=lambda:ejecutar(variable,RutanoticiasOdio,RutanoticiasNOOdio))
-ejecutartrain.place(relx=0.9,rely=0.4,anchor=CENTER)
+
+
+
+
+
+
 
 
 
 
 #recuadro con la info
+
 informacionalgoritmo=Frame(p1)
 informacionalgoritmo.config(width=300,height=130,background="white",relief=tk.FLAT,bd=20,highlightthickness=4) 
 informacionalgoritmo.place(relx=0.3,rely=0.5,anchor=CENTER)
@@ -166,6 +185,35 @@ Lvistaprevia1=Label(informacionalgoritmo,text="Ejemplares odio:",font=('Arial',7
 Lvistaprevia2=Label(informacionalgoritmo,text="Ejemplares No odio:",font=('Arial',7)).place(relx=0.1,rely=0.4,anchor=W)
 Lvistaprevia3=Label(informacionalgoritmo,text="Total:",font=('Arial',7)).place(relx=0.1,rely=0.6,anchor=W)
 Lvistaprevia4=Label(informacionalgoritmo,text="Algoritmo seleccionado:",font=('Arial',7)).place(relx=0.1,rely=0.8,anchor=W)
+
+#fin recuadro
+#recuadro 2
+
+matrizdisper=Frame(p1)
+matrizdisper.config(width=600,height=90,background="white",relief=tk.FLAT,bd=20,highlightthickness=4) 
+matrizdisper.place(relx=0.1,rely=0.7)
+
+LResultado=Label(matrizdisper,text="Resultados:",font=('Arial',12)).place(relx=0.1,rely=0,anchor=CENTER)
+
+
+#fin recuadro 2
+
+
+
+ejecutartrain=Button(p1,text="Ejecutar",command=lambda:ejecutar(variablealgoritmo.get(),RutanoticiasOdio,RutanoticiasNOOdio,informacionalgoritmo))
+ejecutartrain.place(relx=0.9,rely=0.4,anchor=CENTER)
+
+#guardar
+
+Lguardar=Label(p1,text="Guardar Modelo:").place(relx=0.1,rely=0.9)
+
+
+
+#fin guardar
+
+
+
+
 
 #elementos clasificacion
 
