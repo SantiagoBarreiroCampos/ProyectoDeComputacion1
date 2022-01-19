@@ -5,12 +5,16 @@ Created on Wed Jan 19 15:03:57 2022
 @author: Yago
 """
 import os
-from CreadorDF import CreadorDF
+from TRAIN import TRAIN
 
-creador = CreadorDF()
+entrenamiento = TRAIN()
 
 paths = [os.getcwd() + "\\Odio", os.getcwd() + "\\NoOdio"]
+algoritmo = "SVM"
 
-tabla, palabras = creador.creadorDF(paths[0], paths[1])
+clf, matriz, palabras = entrenamiento.Train(paths[0], paths[1], algoritmo)
+#tabla, palabras = creador.creadorDF(paths[0], paths[1])
 
-print(tabla)
+print("\n----------DEVUELTO----------\n")
+print(matriz)
+#print(palabras)

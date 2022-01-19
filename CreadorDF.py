@@ -87,7 +87,7 @@ class CreadorDF:
     
     
     
-    def creadorDFTrain(self,pathOdio, pathNoOdio):
+    def creadorDFTrain(self, pathOdio, pathNoOdio):
         filesOdio = os.listdir(pathOdio)
         filesNoOdio = os.listdir(pathNoOdio)
         files = filesOdio+filesNoOdio
@@ -138,9 +138,9 @@ class CreadorDF:
         categorias = []
         for nombreArchivo in index:
             if "NoOdio" in nombreArchivo:
-                categorias.append("NoOdio")
+                categorias.append(0)
             else:
-                categorias.append("Odio")
+                categorias.append(1)
             i+=1 
         tabla.insert(0, "CATEGORIA", categorias, True)
         
