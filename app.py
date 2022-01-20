@@ -81,8 +81,9 @@ def abrirarchivo(x,Rutanoticiasclasificar,p2):
     ejecutarTest(Rutanoticiasclasificar, loaded_model,dirarchivolistaplabras)
 
 
-    t=Table(p2,heigt=300,weith=350,column=3)
-    t.place(relx=0.1,rely=0.6,anchor=CENTER)
+    t=Table(p2,weith=350,column=3)
+
+    t.place(relx=0.1,rely=0.6,heigt=300,anchor=CENTER)
 
 
 
