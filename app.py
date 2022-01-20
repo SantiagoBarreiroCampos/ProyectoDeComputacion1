@@ -107,16 +107,12 @@ def ejecutar(x,rutaOdio,rutaNoOdio,informacionalgoritmo):
     return 0
 
 
-def callbackalgoritmo(*args):
-    print(variablealgoritmo.get())
-    return 1
-
 
 def guardar(x):
 
 
 
-    directorio = filedialog.asksaveasfile(defaultextension=".joblib",title="Save",filetypes=(("pickel clf", "*.joblib"),("all files", "*.*")))
+    directorio = filedialog.asksaveasfilename(defaultextension=".joblib",title="Save",filetypes=(("pickel clf", "*.joblib"),("all files", "*.*")))
                     
 
     x.delete(0,"end")
@@ -124,7 +120,7 @@ def guardar(x):
     x.textvariable=directorio
     
     
-    dump(clf, open(directorio,"wb")) 
+    dump(clf, directorio) 
     
 
 
@@ -195,7 +191,7 @@ variablealgoritmo.set(OptionList[0])
 opt = tk.OptionMenu(p1, variablealgoritmo, *OptionList)
 opt.config(width=40)
 opt.place(relx=0.3,rely=0.3,anchor=CENTER)
-variablealgoritmo.trace("w", callbackalgoritmo)
+
 
 
 
@@ -247,7 +243,7 @@ Rdirguardar = StringVar()
 Lguardardir=Entry(p1,text='Ruta',width = 60, textvariable=Rdirguardar)
 Lguardardir.place(height=19,relx=0.5,rely=0.925,anchor=CENTER)
 
-BGuardarmodelo=Button(p1,text="Guardar",command=lambda:guardar(Rdirguardar))
+BGuardarmodelo=Button(p1,text="Guardar",command=lambda:guardar(Lguardardir))
 BGuardarmodelo.place(relx=0.9,rely=0.925,anchor=CENTER)
 
 
