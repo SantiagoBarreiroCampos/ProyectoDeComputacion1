@@ -1,10 +1,14 @@
 from argparse import Action
 from ast import Global
 from cgitb import enable, text
+from collections import defaultdict
 from ctypes import sizeof
 from ctypes.wintypes import SIZE
+from email.policy import default
 from faulthandler import disable
+from msilib import Table
 import os
+import string
 from this import d
 import tkinter as tk 
 from tkinter import ttk
@@ -12,6 +16,7 @@ from tkinter import *
 from tkinter import filedialog
 from tkinter import font
 from turtle import left
+from unittest import TestCase
 import numpy as np
 import pandas as pd
 from pyrsistent import b
@@ -32,47 +37,81 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 from sympy import C
 from CreadorDF import CreadorDF
+from TEST import TEST
 from TRAIN import *
 from joblib import dump, load
 import pickle
-
+from os import remove
 
 
 
 
 
 def abrir_dir():
-
+    
 
     directorio=filedialog.askdirectory(title="selecciona directorio")
-    if directorio!="":
-        os.chdir(directorio)
+
   
+
 
     return directorio
 
-def abrirarchivo(x):
+def abrirarchivo(x,Rutanoticiasclasificar,p2):
 
 
     directorio=filedialog.askopenfile(title="selecciona el modelo")
   
     x.delete(0,"end")
-    x.insert(0,directorio)
-    x.textvariable=directorio
+    x.insert(0,directorio.name)
+    x.textvariable=directorio.name
+    
+    #usar modelo
+    
+    x=open(directorio.name,"rb")
+    
+    loaded_model = pickle.load(x)
 
-    #ejecutar
+    dirarchivolistaplabras=directorio.name
+    dirarchivolistaplabras =dirarchivolistaplabras.replace(".joblib", ".txt")
 
+
+
+
+    ejecutarTest(Rutanoticiasclasificar, loaded_model,dirarchivolistaplabras)
+
+
+    t=Table(p2,heigt=300,weith=350,column=3)
+    t.place(relx=0.1,rely=0.6,anchor=CENTER)
 
 
 
     return x
 
-def carpeta(x,dir):
+def carpeta(x):
 
     dir=abrir_dir()
     x.delete(0,"end")
     x.insert(0,dir)
     x.textvariable=dir
+
+    global listanoticias
+    listanoticias=dir
+
+
+    
+    return x,dir
+
+def carpetaTEST(x):
+
+    dir=abrir_dir()
+    x.delete(0,"end")
+    x.insert(0,dir)
+    x.textvariable=dir
+
+    global listanoticiasunlabeled
+    listanoticiasunlabeled=dir
+
 
     
     return x,dir
@@ -133,7 +172,26 @@ def ejecutar(x,rutaOdio,rutaNoOdio,informacionalgoritmo,matrizdisper):
 
     return 0
 
+def ejecutarTest(pathUnlabeled, clfloaded,dirarchivolistaplabras):
 
+
+    algoritmo=TEST()
+    
+    #listapalabras
+
+    with open(dirarchivolistaplabras) as f:
+        text = f.read()
+        listapalabras = text.split("\n")
+    
+
+
+
+    dfTest=algoritmo.Test(pathUnlabeled, clfloaded,listapalabras)
+
+
+
+
+    return 0
 
 def guardar(x):
 
@@ -146,9 +204,21 @@ def guardar(x):
     x.insert(0,directorio)
     x.textvariable=directorio
     
+    print(directorio)
+    pickle.dump(clf, open(directorio, 'wb')) 
+
+    archivolistaplabras=directorio
+
+    archivolistaplabras = archivolistaplabras.replace(".joblib", ".txt")
+
+    print(archivolistaplabras)
+
+    if (os.path.isfile(archivolistaplabras)):
+        remove(archivolistaplabras)
     
-    dump(clf, directorio) 
-    
+    file = open(archivolistaplabras, "w")
+    for word in listapalabra:
+        file.write(word+"\n")
 
 
     
@@ -174,8 +244,9 @@ p2=ttk.Frame(nb)
 
 RutanoticiasOdio=os.getcwd()+"\\Odio"
 RutanoticiasNOOdio=os.getcwd()+"\\NoOdio"
+RutanoticiasUnlabel=os.getcwd()+"\\Unlabeled"
 
-#elementos entrenamiento
+#seleccionar elementos entrenamiento
 
 LnoticiasOdioEntreno=Label(p1,text='Noticias Odio:')
 LnoticiasOdioEntreno.place(relx=0.1,rely=0.1 , anchor=CENTER)
@@ -188,7 +259,7 @@ LnoticiasOdioEntrenoruta=Entry(p1,text='Ruta',width = 60, textvariable=Rutanotic
 LnoticiasOdioEntrenoruta.place(height=19,relx=0.5,rely=0.1,anchor=CENTER)
 
 
-BnoticiasOdioEntrenoruta=Button(p1,text="Abrir",command=lambda:carpeta(LnoticiasOdioEntrenoruta,RutanoticiasOdio))
+BnoticiasOdioEntrenoruta=Button(p1,text="Abrir",command=lambda:carpeta(LnoticiasOdioEntrenoruta))
 BnoticiasOdioEntrenoruta.place(relx=0.9,rely=0.1,anchor=CENTER)
 
 
@@ -196,19 +267,17 @@ RutanoticiasNOOdiolabel = StringVar()
 LnoticiasNoOdioEntrenoboton=Entry(p1,text='Ruta',width = 60, textvariable=RutanoticiasNOOdiolabel)
 LnoticiasNoOdioEntrenoboton.place(height=19,relx=0.5,rely=0.2,anchor=CENTER)
 
-BnoticiasNoOdioEntrenoruta=Button(p1,text="Abrir",command=lambda:carpeta(LnoticiasNoOdioEntrenoboton,RutanoticiasNOOdio))
+BnoticiasNoOdioEntrenoruta=Button(p1,text="Abrir",command=lambda:carpeta(LnoticiasNoOdioEntrenoboton))
 BnoticiasNoOdioEntrenoruta.place(relx=0.9,rely=0.2,anchor=CENTER)
 
+
+#barra algoritmos
 OptionList = [
 "Decision Tree",
 "SVM",
 "Naive Bayes",
 
 ] 
-
-
-
-
 
 variablealgoritmo = tk.StringVar(p1)
 variablealgoritmo.set(OptionList[0])
@@ -218,17 +287,6 @@ variablealgoritmo.set(OptionList[0])
 opt = tk.OptionMenu(p1, variablealgoritmo, *OptionList)
 opt.config(width=40)
 opt.place(relx=0.3,rely=0.3,anchor=CENTER)
-
-
-
-
-
-
-
-
-
-
-
 
 
 #recuadro con la info
@@ -257,7 +315,7 @@ LResultado=Label(matrizdisper,text="Resultados:",font=('Arial',12)).place(relx=0
 
 
 
-ejecutartrain=Button(p1,text="Ejecutar",command=lambda:ejecutar(variablealgoritmo.get(),RutanoticiasOdio,RutanoticiasNOOdio,informacionalgoritmo,matrizdisper))
+ejecutartrain=Button(p1,text="Ejecutar",command=lambda:ejecutar(variablealgoritmo.get(),RutanoticiasOdiolabel.get(),RutanoticiasNOOdiolabel.get(),informacionalgoritmo,matrizdisper))
 ejecutartrain.place(relx=0.9,rely=0.4,anchor=CENTER)
 
 #guardar
@@ -300,12 +358,16 @@ Bseleccionarnoticiasrutasparaclasificar.place(relx=0.9,rely=0.1,anchor=CENTER)
 
 
 
-Rutaclasificador = StringVar()
-Lclasificador=Entry(p2,text='ruta',width = 60, textvariable=Rutaclasificador)
+RutaModeloclf = StringVar()
+Lclasificador=Entry(p2,text='ruta',width = 60, textvariable=RutaModeloclf)
 Lclasificador.place(height=19,relx=0.5,rely=0.2,anchor=CENTER)
 
-Bseleccionarmodeloclasificador=Button(p2,text="Abrir",command=lambda:abrirarchivo(Lclasificador),state=tk.DISABLED)
+Bseleccionarmodeloclasificador=Button(p2,text="Modelo",command=lambda:abrirarchivo(Lclasificador,Rutanoticiasclasificar.get(),p2),state=tk.DISABLED)
 Bseleccionarmodeloclasificador.place(relx=0.9,rely=0.2,anchor=CENTER)
+
+
+
+
 
 
 
