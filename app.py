@@ -1,4 +1,5 @@
 from argparse import Action
+from ast import Global
 from cgitb import enable, text
 from ctypes import sizeof
 from ctypes.wintypes import SIZE
@@ -27,7 +28,8 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 import re
 from CreadorDF import CreadorDF
 from TRAIN import *
-
+from joblib import dump, load
+import pickle
 
 
 
@@ -54,6 +56,9 @@ def abrirarchivo(x):
     x.textvariable=directorio
 
     #ejecutar
+
+
+
 
     return x
 
@@ -83,21 +88,50 @@ def ejecutar(x,rutaOdio,rutaNoOdio,informacionalgoritmo):
     LNtotal=Label(informacionalgoritmo,text=(len([name for name in os.listdir(rutaOdio)])+len([name for name in os.listdir(rutaNoOdio)])),font=('Arial',7)).place(relx=0.6,rely=0.6,anchor=W)
     Lalgoritmo=Label(informacionalgoritmo,text=x,font=('Arial',7)).place(relx=0.6,rely=0.8,anchor=W)
 
+    global clf
+    global matrizdis
+    global preci
+    global listapalabra
 
 
 
     algoritmo=TRAIN()
+    print(x)
+
     clf,matrizdis,preci,listapalabra=algoritmo.Train(rutaOdio,rutaNoOdio,x)
 
+    
+   
 
 
-
-    return clf,matrizdis,preci,listapalabra
+    return 0
 
 
 def callbackalgoritmo(*args):
     print(variablealgoritmo.get())
     return 1
+
+
+def guardar(x):
+
+
+
+    directorio = filedialog.asksaveasfile(defaultextension=".joblib",title="Save",filetypes=(("pickel clf", "*.joblib"),("all files", "*.*")))
+                    
+
+    x.delete(0,"end")
+    x.insert(0,directorio)
+    x.textvariable=directorio
+    
+    
+    dump(clf, open(directorio,"wb")) 
+    
+
+
+    
+    return x,directorio
+
+
 
 
 root = Tk()
@@ -127,7 +161,7 @@ LnoticiasNoOdioEntreno=Label(p1,text='Noticias No Odio:')
 LnoticiasNoOdioEntreno.place(relx=0.1,rely=0.2 , anchor=CENTER)
 
 RutanoticiasOdiolabel = StringVar()
-LnoticiasOdioEntrenoruta=Entry(p1,text='ruta',width = 60, textvariable=RutanoticiasOdiolabel )
+LnoticiasOdioEntrenoruta=Entry(p1,text='Ruta',width = 60, textvariable=RutanoticiasOdiolabel)
 LnoticiasOdioEntrenoruta.place(height=19,relx=0.5,rely=0.1,anchor=CENTER)
 
 
@@ -136,7 +170,7 @@ BnoticiasOdioEntrenoruta.place(relx=0.9,rely=0.1,anchor=CENTER)
 
 
 RutanoticiasNOOdiolabel = StringVar()
-LnoticiasNoOdioEntrenoboton=Entry(p1,text='ruta',width = 60, textvariable=RutanoticiasNOOdiolabel)
+LnoticiasNoOdioEntrenoboton=Entry(p1,text='Ruta',width = 60, textvariable=RutanoticiasNOOdiolabel)
 LnoticiasNoOdioEntrenoboton.place(height=19,relx=0.5,rely=0.2,anchor=CENTER)
 
 BnoticiasNoOdioEntrenoruta=Button(p1,text="Abrir",command=lambda:carpeta(LnoticiasNoOdioEntrenoboton,RutanoticiasNOOdio))
@@ -207,6 +241,14 @@ ejecutartrain.place(relx=0.9,rely=0.4,anchor=CENTER)
 
 Lguardar=Label(p1,text="Guardar Modelo:").place(relx=0.1,rely=0.9)
 
+
+
+Rdirguardar = StringVar()
+Lguardardir=Entry(p1,text='Ruta',width = 60, textvariable=Rdirguardar)
+Lguardardir.place(height=19,relx=0.5,rely=0.925,anchor=CENTER)
+
+BGuardarmodelo=Button(p1,text="Guardar",command=lambda:guardar(Rdirguardar))
+BGuardarmodelo.place(relx=0.9,rely=0.925,anchor=CENTER)
 
 
 #fin guardar
