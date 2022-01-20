@@ -28,7 +28,8 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn import linear_model
 from sklearn.feature_extraction.text import TfidfVectorizer
 import re
-
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.figure import Figure
 from sympy import C
 from CreadorDF import CreadorDF
 from TRAIN import *
@@ -83,7 +84,8 @@ def activarbtn(Bseleccionarmodeloclasificador):
     return 1
 
 
-
+def prop(n):
+    return 360.0 * n / 100
 
 def ejecutar(x,rutaOdio,rutaNoOdio,informacionalgoritmo,matrizdisper):
 
@@ -119,9 +121,15 @@ def ejecutar(x,rutaOdio,rutaNoOdio,informacionalgoritmo,matrizdisper):
     imprimirM="Verdaderos Positivos:"+a+"  Falsos Positivos:"+b+"\n"+"Falsos Negativos:"+c+"  Verdaderos Negativos:"+d
     LMatriz=Label(matrizdisper,text=imprimirM,font=('Arial',10)).place(relx=0.5,rely=0.5,anchor=CENTER)
     
-   
-   
+    n=float(preci)
 
+    canvas1 =tk.Canvas(matrizdisper, width = 50, height = 50)
+    canvas1.pack()
+    blue=prop(n)
+    red=prop(100-n)
+    canvas1.create_arc((2,2,48,48), fill="#0000ff", outline="#0000ff", start=prop(0), extent = blue)
+    canvas1.create_arc((2,2,48,48), fill="#ff0000", outline="#ff0000", start=blue, extent = red)
+    canvas1.place(relx=0.9,rely=0.5,anchor=CENTER)
 
     return 0
 
