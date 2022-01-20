@@ -5,6 +5,7 @@ from ctypes import sizeof
 from ctypes.wintypes import SIZE
 from faulthandler import disable
 import os
+from this import d
 import tkinter as tk 
 from tkinter import ttk
 from tkinter import *
@@ -13,6 +14,7 @@ from tkinter import font
 from turtle import left
 import numpy as np
 import pandas as pd
+from pyrsistent import b
 import seaborn as sb
 import matplotlib.pyplot as plt
 import requests
@@ -26,6 +28,8 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn import linear_model
 from sklearn.feature_extraction.text import TfidfVectorizer
 import re
+
+from sympy import C
 from CreadorDF import CreadorDF
 from TRAIN import *
 from joblib import dump, load
@@ -81,12 +85,17 @@ def activarbtn(Bseleccionarmodeloclasificador):
 
 
 
-def ejecutar(x,rutaOdio,rutaNoOdio,informacionalgoritmo):
+def ejecutar(x,rutaOdio,rutaNoOdio,informacionalgoritmo,matrizdisper):
 
     LNejemplaresOdio=Label(informacionalgoritmo,text=len([name for name in os.listdir(rutaOdio)]),font=('Arial',7)).place(relx=0.6,rely=0.2,anchor=W)
     LNejemplaresNoOdio=Label(informacionalgoritmo,text=len([name for name in os.listdir(rutaNoOdio)]),font=('Arial',7)).place(relx=0.6,rely=0.4,anchor=W)
     LNtotal=Label(informacionalgoritmo,text=(len([name for name in os.listdir(rutaOdio)])+len([name for name in os.listdir(rutaNoOdio)])),font=('Arial',7)).place(relx=0.6,rely=0.6,anchor=W)
     Lalgoritmo=Label(informacionalgoritmo,text=x,font=('Arial',7)).place(relx=0.6,rely=0.8,anchor=W)
+
+
+    
+
+
 
     global clf
     global matrizdis
@@ -101,6 +110,16 @@ def ejecutar(x,rutaOdio,rutaNoOdio,informacionalgoritmo):
     clf,matrizdis,preci,listapalabra=algoritmo.Train(rutaOdio,rutaNoOdio,x)
 
     
+    a=str(matrizdis[0][0])
+    b=str(matrizdis[0][1])
+    c=str(matrizdis[1][0])
+    d=str(matrizdis[1][1])
+    
+    
+    imprimirM="Verdaderos Positivos:"+a+"  Falsos Positivos:"+b+"\n"+"Falsos Negativos:"+c+"  Verdaderos Negativos:"+d
+    LMatriz=Label(matrizdisper,text=imprimirM,font=('Arial',10)).place(relx=0.5,rely=0.5,anchor=CENTER)
+    
+   
    
 
 
@@ -230,7 +249,7 @@ LResultado=Label(matrizdisper,text="Resultados:",font=('Arial',12)).place(relx=0
 
 
 
-ejecutartrain=Button(p1,text="Ejecutar",command=lambda:ejecutar(variablealgoritmo.get(),RutanoticiasOdio,RutanoticiasNOOdio,informacionalgoritmo))
+ejecutartrain=Button(p1,text="Ejecutar",command=lambda:ejecutar(variablealgoritmo.get(),RutanoticiasOdio,RutanoticiasNOOdio,informacionalgoritmo,matrizdisper))
 ejecutartrain.place(relx=0.9,rely=0.4,anchor=CENTER)
 
 #guardar
