@@ -112,17 +112,17 @@ def abrirarchivo(x,Rutanoticiasclasificar,framedelatabla):
             with open(file_path, 'r', encoding="ISO 8859-1") as f:
                 
                 fileread = f.read()
-                noticiasmostrar.append(file)
-                splitedcontent = fileread.split("\n#####\n")#0=link 1=autor 2=fecha 3=titulo 4=content
-                nombresnoticias.append(splitedcontent[3])
+                noticiasmostrar.append(fileread)
+                
+                nombresnoticias.append(file)
     
                 
     
     i=0
-
+    #
     for nombre in nombresnoticias:
 
-        tabladenoticias.insert(parent='',index='end',iid=i,values=(nombresnoticias[i],dfTest["CATEGORIA"],"ver"))
+        tabladenoticias.insert(parent='',index='end',iid=i,values=(nombresnoticias[i],dfTest["CATEGORIA"][i],"ver"))
         i=i+1
 
 
