@@ -45,8 +45,6 @@ from os import remove
 
 
 
-
-
 def abrir_dir():
     directorio=filedialog.askdirectory(title="selecciona directorio")
     return directorio
@@ -96,41 +94,27 @@ def abrirarchivo(x,Rutanoticiasclasificar,framedelatabla):
     tabladenoticias.heading("#2",text="Categoria")
     tabladenoticias.heading("#3",text="Ver")
 
-    
-    nombresnoticias=[]
-    noticiasmostrar=[]
-    
-    
-    files = os.listdir(Rutanoticiasclasificar)
-    arrayNoticias = []
-    
-    for file in files:
-        file_path = os.path.join(Rutanoticiasclasificar, file)
-        if os.path.isfile(file_path):
-            with open(file_path, 'r', encoding="ISO 8859-1") as f:
-                
-                fileread = f.read()
-                noticiasmostrar.append(fileread)
-                
-                nombresnoticias.append(file)
-    
-                
-    
     i=0
-    #
-    for nombre in nombresnoticias:
+    for nombre in dfTest.index:
 
-        tabladenoticias.insert(parent='',index='end',iid=i,values=(nombresnoticias[i],dfTest["CATEGORIA"][i],"ver"))
+        tabladenoticias.insert(parent='',index='end',iid=i,values=(nombre,dfTest["CATEGORIA"][i],"ver"))
         i=i+1
-
-
     tabladenoticias.pack(fill="x")
 
 
     LNtotal=Label(informacionalgoritmo2,text=len([name for name in dfTest['CATEGORIA']]),font=('Arial',7)).place(relx=0.6,rely=0.2,anchor=W)
-    LNejemplaresOdio=Label(informacionalgoritmo2,text=len([name for name in dfTest['CATEGORIA'] if name == 'Odio']),font=('Arial',7)).place(relx=0.6,rely=0.4,anchor=W)
-    LNejemplaresNoOdio=Label(informacionalgoritmo2,text=(len([name for name in dfTest['CATEGORIA'] if name == 'NoOdio'])),font=('Arial',7)).place(relx=0.6,rely=0.6,anchor=W)
+    LNejemplaresOdio=Label(informacionalgoritmo2,text=len([name for name in dfTest['CATEGORIA'] if name == 'Odio']),font=('Arial',7)).place(relx=0.6,rely=0.35,anchor=W)
+    LNejemplaresNoOdio=Label(informacionalgoritmo2,text=(len([name for name in dfTest['CATEGORIA'] if name == 'NoOdio'])),font=('Arial',7)).place(relx=0.6,rely=0.50,anchor=W)
     
+    n=float(len([name for name in dfTest['CATEGORIA'] if name == 'NoOdio'])*10)
+           
+    canvas1 =tk.Canvas(informacionalgoritmo2, width = 50, height = 50)
+    canvas1.pack()
+    blue=prop(n)
+    red=prop(100-n)
+    canvas1.create_arc((2,2,48,48), fill="#0000ff", outline="#0000ff", start=prop(0), extent = blue)
+    canvas1.create_arc((2,2,48,48), fill="#ff0000", outline="#ff0000", start=blue, extent = red)
+    canvas1.place(relx=0.5,rely=0.8,anchor=CENTER)
 
     return x
 
@@ -439,8 +423,8 @@ informacionalgoritmo2.place(relx=0.82,rely=0.6,anchor=CENTER)
 
 Linfo=Label(informacionalgoritmo2,text="RESUMEN:",font=('Arial',9)).place(relx=0.1,rely=0,anchor=CENTER)
 Linfo1=Label(informacionalgoritmo2,text="Total noticias:",font=('Arial',7)).place(relx=0.1,rely=0.2,anchor=W)
-Linfo2=Label(informacionalgoritmo2,text="Odio:",font=('Arial',7)).place(relx=0.1,rely=0.4,anchor=W)
-Linfo3=Label(informacionalgoritmo2,text="NoOdio:",font=('Arial',7)).place(relx=0.1,rely=0.6,anchor=W)
+Linfo2=Label(informacionalgoritmo2,text="Odio:",font=('Arial',7)).place(relx=0.1,rely=0.35,anchor=W)
+Linfo3=Label(informacionalgoritmo2,text="NoOdio:",font=('Arial',7)).place(relx=0.1,rely=0.5,anchor=W)
 
 
 Bseleccionarmodeloclasificador=Button(p2,text="Modelo",command=lambda:abrirarchivo(Lclasificador,Rutanoticiasclasificar.get(),tablita),state=tk.DISABLED)
