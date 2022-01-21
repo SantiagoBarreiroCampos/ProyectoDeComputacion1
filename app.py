@@ -1,45 +1,45 @@
-from argparse import Action
-from ast import Global
-from cgitb import enable, text
-from collections import defaultdict
-from ctypes import sizeof
-from ctypes.wintypes import SIZE
-from email.policy import default
-from faulthandler import disable
-from msilib import Table
+#from argparse import Action
+#from ast import Global
+#from cgitb import enable, text
+#from collections import defaultdict
+#from ctypes import sizeof
+#from ctypes.wintypes import SIZE
+#from email.policy import default
+#from faulthandler import disable
+#from msilib import Table
 import os
-import string
-from this import d
+#import string
+#from this import d
 import tkinter as tk 
 from tkinter import ttk
 from tkinter import *
 from tkinter import filedialog
-from tkinter import font
-from turtle import left, width
-from unittest import TestCase
-import numpy as np
-import pandas as pd
-from pyrsistent import b
-import seaborn as sb
-import matplotlib.pyplot as plt
-import requests
-import os
+#from tkinter import font
+#from turtle import left, width
+#from unittest import TestCase
+#import numpy as np
+#import pandas as pd
+#from pyrsistent import b
+#import seaborn as sb
+#import matplotlib.pyplot as plt
+#import requests
+#import os
 from io import open
-from nltk.tokenize import RegexpTokenizer
-from nltk.stem.snowball import SnowballStemmer
-import pandas as pd
-import csv
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn import linear_model
-from sklearn.feature_extraction.text import TfidfVectorizer
-import re
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from matplotlib.figure import Figure
-from sympy import C
-from CreadorDF import CreadorDF
+#from nltk.tokenize import RegexpTokenizer
+#from nltk.stem.snowball import SnowballStemmer
+#import pandas as pd
+#import csv
+#from sklearn.feature_extraction.text import TfidfVectorizer
+#from sklearn import linear_model
+#from sklearn.feature_extraction.text import TfidfVectorizer
+#import re
+#from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+#from matplotlib.figure import Figure
+#from sympy import C
+#from CreadorDF import CreadorDF
 from TEST import TEST
-from TRAIN import *
-from joblib import dump, load
+from TRAIN import TRAIN
+#from joblib import dump, load
 import pickle
 from os import remove
 
@@ -48,16 +48,14 @@ from os import remove
 
 
 def abrir_dir():
-    
-
     directorio=filedialog.askdirectory(title="selecciona directorio")
-
-  
-
-
     return directorio
 
+
 def abrirarchivo(x,Rutanoticiasclasificar,framedelatabla):
+
+    
+    #Lalgoritmo=Label(informacionalgoritmo,text=x,font=('Arial',7)).place(relx=0.6,rely=0.8,anchor=W)
 
     global tabladenoticias
     global dfTest
@@ -129,7 +127,10 @@ def abrirarchivo(x,Rutanoticiasclasificar,framedelatabla):
     tabladenoticias.pack(fill="x")
 
 
-
+    LNtotal=Label(informacionalgoritmo2,text=len([name for name in dfTest['CATEGORIA']]),font=('Arial',7)).place(relx=0.6,rely=0.2,anchor=W)
+    LNejemplaresOdio=Label(informacionalgoritmo2,text=len([name for name in dfTest['CATEGORIA'] if name == 'Odio']),font=('Arial',7)).place(relx=0.6,rely=0.4,anchor=W)
+    LNejemplaresNoOdio=Label(informacionalgoritmo2,text=(len([name for name in dfTest['CATEGORIA'] if name == 'NoOdio'])),font=('Arial',7)).place(relx=0.6,rely=0.6,anchor=W)
+    
 
     return x
 
@@ -186,13 +187,18 @@ def activarbtn(Bseleccionarmodeloclasificador):
 def prop(n):
     return 360.0 * n / 100
 
+def vistaPrevia(rutaOdio,rutaNoOdio,informacionalgoritmoo):
+    if(rutaOdio!=''):
+        LNejemplaresOdio=Label(informacionalgoritmo,text=len([name for name in os.listdir(rutaOdio)]),font=('Arial',7)).place(relx=0.6,rely=0.2,anchor=W)
+    if(rutaNoOdio!=''):
+        LNejemplaresNoOdio=Label(informacionalgoritmo,text=len([name for name in os.listdir(rutaNoOdio)]),font=('Arial',7)).place(relx=0.6,rely=0.4,anchor=W)
+    if(rutaOdio!='' and rutaNoOdio!=''):
+        LNtotal=Label(informacionalgoritmo,text=(len([name for name in os.listdir(rutaOdio)])+len([name for name in os.listdir(rutaNoOdio)])),font=('Arial',7)).place(relx=0.6,rely=0.6,anchor=W)
+    Lalgoritmo=Label(informacionalgoritmo,text=informacionalgoritmoo,font=('Arial',7)).place(relx=0.6,rely=0.8,anchor=W)
+
+
+    
 def ejecutar(x,rutaOdio,rutaNoOdio,informacionalgoritmo,matrizdisper):
-
-    LNejemplaresOdio=Label(informacionalgoritmo,text=len([name for name in os.listdir(rutaOdio)]),font=('Arial',7)).place(relx=0.6,rely=0.2,anchor=W)
-    LNejemplaresNoOdio=Label(informacionalgoritmo,text=len([name for name in os.listdir(rutaNoOdio)]),font=('Arial',7)).place(relx=0.6,rely=0.4,anchor=W)
-    LNtotal=Label(informacionalgoritmo,text=(len([name for name in os.listdir(rutaOdio)])+len([name for name in os.listdir(rutaNoOdio)])),font=('Arial',7)).place(relx=0.6,rely=0.6,anchor=W)
-    Lalgoritmo=Label(informacionalgoritmo,text=x,font=('Arial',7)).place(relx=0.6,rely=0.8,anchor=W)
-
 
     
 
@@ -302,9 +308,9 @@ nb.pack(fill='both',expand=YES)
 p1=ttk.Frame(nb)
 p2=ttk.Frame(nb)
 
-RutanoticiasOdio=os.getcwd()+"\\Odio"
-RutanoticiasNOOdio=os.getcwd()+"\\NoOdio"
-RutanoticiasUnlabel=os.getcwd()+"\\Unlabeled"
+#RutanoticiasOdio=os.getcwd()+"\\Odio"
+#RutanoticiasNOOdio=os.getcwd()+"\\NoOdio"
+#RutanoticiasUnlabel=os.getcwd()+"\\Unlabeled"
 
 #seleccionar elementos entrenamiento
 
@@ -319,7 +325,7 @@ LnoticiasOdioEntrenoruta=Entry(p1,text='Ruta',width = 60, textvariable=Rutanotic
 LnoticiasOdioEntrenoruta.place(height=19,relx=0.5,rely=0.1,anchor=CENTER)
 
 
-BnoticiasOdioEntrenoruta=Button(p1,text="Abrir",command=lambda:carpeta(LnoticiasOdioEntrenoruta))
+BnoticiasOdioEntrenoruta=Button(p1,text="Abrir",command=lambda:[carpeta(LnoticiasOdioEntrenoruta), vistaPrevia(RutanoticiasOdiolabel.get(),RutanoticiasNOOdiolabel.get(),variablealgoritmo)])
 BnoticiasOdioEntrenoruta.place(relx=0.9,rely=0.1,anchor=CENTER)
 
 
@@ -327,7 +333,7 @@ RutanoticiasNOOdiolabel = StringVar()
 LnoticiasNoOdioEntrenoboton=Entry(p1,text='Ruta',width = 60, textvariable=RutanoticiasNOOdiolabel)
 LnoticiasNoOdioEntrenoboton.place(height=19,relx=0.5,rely=0.2,anchor=CENTER)
 
-BnoticiasNoOdioEntrenoruta=Button(p1,text="Abrir",command=lambda:carpeta(LnoticiasNoOdioEntrenoboton))
+BnoticiasNoOdioEntrenoruta=Button(p1,text="Abrir",command=lambda:[carpeta(LnoticiasNoOdioEntrenoboton), vistaPrevia(RutanoticiasOdiolabel.get(),RutanoticiasNOOdiolabel.get(),variablealgoritmo)])
 BnoticiasNoOdioEntrenoruta.place(relx=0.9,rely=0.2,anchor=CENTER)
 
 
@@ -425,12 +431,23 @@ Lclasificador.place(height=19,relx=0.5,rely=0.2,anchor=CENTER)
 tablita=Frame(p2,bg="white")
 tablita.place(height=250,width=450,relx=0.35,rely=0.6,anchor=CENTER)
 
+
+informacionalgoritmo2=Frame(p2)
+informacionalgoritmo2.config(width=200,height=260,background="white",relief=tk.FLAT,bd=20,highlightthickness=4) 
+informacionalgoritmo2.place(relx=0.82,rely=0.6,anchor=CENTER)
+
+
+Linfo=Label(informacionalgoritmo2,text="RESUMEN:",font=('Arial',9)).place(relx=0.1,rely=0,anchor=CENTER)
+Linfo1=Label(informacionalgoritmo2,text="Total noticias:",font=('Arial',7)).place(relx=0.1,rely=0.2,anchor=W)
+Linfo2=Label(informacionalgoritmo2,text="Odio:",font=('Arial',7)).place(relx=0.1,rely=0.4,anchor=W)
+Linfo3=Label(informacionalgoritmo2,text="NoOdio:",font=('Arial',7)).place(relx=0.1,rely=0.6,anchor=W)
+
+
 Bseleccionarmodeloclasificador=Button(p2,text="Modelo",command=lambda:abrirarchivo(Lclasificador,Rutanoticiasclasificar.get(),tablita),state=tk.DISABLED)
 Bseleccionarmodeloclasificador.place(relx=0.9,rely=0.2,anchor=CENTER)
 
 
-
-
+#Linfo4=Label(informacionalgoritmo2,text="Algoritmo seleccionado:",font=('Arial',7)).place(relx=0.1,rely=0.8,anchor=W)
 
 
 
