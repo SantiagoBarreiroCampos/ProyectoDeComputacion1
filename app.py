@@ -15,7 +15,7 @@ from tkinter import ttk
 from tkinter import *
 from tkinter import filedialog
 from tkinter import font
-from turtle import left
+from turtle import left, width
 from unittest import TestCase
 import numpy as np
 import pandas as pd
@@ -57,7 +57,12 @@ def abrir_dir():
 
     return directorio
 
-def abrirarchivo(x,Rutanoticiasclasificar,p2):
+def abrirarchivo(x,Rutanoticiasclasificar,framedelatabla):
+
+    global tabladenoticias
+    global dfTest
+    global nombresnoticias
+    global noticiasmostrar
 
 
     directorio=filedialog.askopenfile(title="selecciona el modelo")
@@ -78,17 +83,71 @@ def abrirarchivo(x,Rutanoticiasclasificar,p2):
 
 
 
-    ejecutarTest(Rutanoticiasclasificar, loaded_model,dirarchivolistaplabras)
+    dfTest=ejecutarTest(Rutanoticiasclasificar, loaded_model,dirarchivolistaplabras)
 
 
-    t=Table(p2,weith=350,column=3)
 
-    t.place(relx=0.1,rely=0.6,heigt=300,anchor=CENTER)
+
+    tabladenoticias=ttk.Treeview(framedelatabla,columns = ('#1','#2','#3'),show='headings',selectmode ='browse')
+
+    scroll=Scrollbar(framedelatabla,command=tabladenoticias.yview)
+    scroll.pack(side="right", fill="y")
+    
+    tabladenoticias.configure(yscrollcommand = scroll.set)
+    tabladenoticias.heading("#1",text="Noticia")
+    tabladenoticias.heading("#2",text="Categoria")
+    tabladenoticias.heading("#3",text="Ver")
+
+    
+    nombresnoticias=[]
+    noticiasmostrar=[]
+    
+    
+    files = os.listdir(Rutanoticiasclasificar)
+    arrayNoticias = []
+    
+    for file in files:
+        file_path = os.path.join(Rutanoticiasclasificar, file)
+        if os.path.isfile(file_path):
+            with open(file_path, 'r', encoding="ISO 8859-1") as f:
+                
+                fileread = f.read()
+                noticiasmostrar.append(file)
+                splitedcontent = fileread.split("\n#####\n")#0=link 1=autor 2=fecha 3=titulo 4=content
+                nombresnoticias.append(splitedcontent[3])
+    
+                
+    
+    i=0
+
+    for nombre in nombresnoticias:
+
+        tabladenoticias.insert(parent='',index='end',iid=i,values=(nombresnoticias[i],dfTest["CATEGORIA"],"ver"))
+        i=i+1
+
+
+    tabladenoticias.pack(fill="x")
+
 
 
 
     return x
 
+
+  
+
+def mostrarnoticia():
+
+
+
+    noticia=Toplevel()
+    noticia.title("APP CLASIFICADORA")
+
+    noticia.geometry('740x500')
+    noticia.resizable(1,1)
+
+
+    return 0
 def carpeta(x):
 
     dir=abrir_dir()
@@ -192,7 +251,7 @@ def ejecutarTest(pathUnlabeled, clfloaded,dirarchivolistaplabras):
 
 
 
-    return 0
+    return dfTest
 
 def guardar(x):
 
@@ -363,7 +422,10 @@ RutaModeloclf = StringVar()
 Lclasificador=Entry(p2,text='ruta',width = 60, textvariable=RutaModeloclf)
 Lclasificador.place(height=19,relx=0.5,rely=0.2,anchor=CENTER)
 
-Bseleccionarmodeloclasificador=Button(p2,text="Modelo",command=lambda:abrirarchivo(Lclasificador,Rutanoticiasclasificar.get(),p2),state=tk.DISABLED)
+tablita=Frame(p2,bg="white")
+tablita.place(height=250,width=450,relx=0.35,rely=0.6,anchor=CENTER)
+
+Bseleccionarmodeloclasificador=Button(p2,text="Modelo",command=lambda:abrirarchivo(Lclasificador,Rutanoticiasclasificar.get(),tablita),state=tk.DISABLED)
 Bseleccionarmodeloclasificador.place(relx=0.9,rely=0.2,anchor=CENTER)
 
 

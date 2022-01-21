@@ -55,7 +55,7 @@ class CreadorDF:
             if os.path.isfile(file_path):
                 with open(file_path, 'r', encoding="ISO 8859-1") as f:
                     
-                    fileread = f.read();
+                    fileread = f.read()
                     splitedcontent = fileread.split("\n#####\n")#0=link 1=autor 2=fecha 3=titulo 4=content
                     #juntar title y content
                     content=splitedcontent[3]+" "+splitedcontent[4]+" "+splitedcontent[5]
