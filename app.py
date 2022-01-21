@@ -1,45 +1,20 @@
-#from argparse import Action
-#from ast import Global
-#from cgitb import enable, text
-#from collections import defaultdict
-#from ctypes import sizeof
-#from ctypes.wintypes import SIZE
-#from email.policy import default
-#from faulthandler import disable
-#from msilib import Table
 import os
-#import string
-#from this import d
 import tkinter as tk 
 from tkinter import ttk
-from tkinter import *
+from tkinter import Tk
+from tkinter import Scrollbar
+from tkinter import W
+from tkinter import CENTER
+from tkinter import Button
+from tkinter import Entry
+from tkinter import Frame
+from tkinter import StringVar
+from tkinter import YES
+from tkinter import Label
 from tkinter import filedialog
-#from tkinter import font
-#from turtle import left, width
-#from unittest import TestCase
-#import numpy as np
-#import pandas as pd
-#from pyrsistent import b
-#import seaborn as sb
-#import matplotlib.pyplot as plt
-#import requests
-#import os
 from io import open
-#from nltk.tokenize import RegexpTokenizer
-#from nltk.stem.snowball import SnowballStemmer
-#import pandas as pd
-#import csv
-#from sklearn.feature_extraction.text import TfidfVectorizer
-#from sklearn import linear_model
-#from sklearn.feature_extraction.text import TfidfVectorizer
-#import re
-#from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-#from matplotlib.figure import Figure
-#from sympy import C
-#from CreadorDF import CreadorDF
 from TEST import TEST
 from TRAIN import TRAIN
-#from joblib import dump, load
 import pickle
 from os import remove
 
@@ -125,7 +100,7 @@ def mostrarnoticia():
 
 
 
-    noticia=Toplevel()
+    noticia='''Toplevel()'''
     noticia.title("APP CLASIFICADORA")
 
     noticia.geometry('740x500')
