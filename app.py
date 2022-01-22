@@ -27,10 +27,9 @@ def abrir_dir():
     return directorio
 
 def OptionMenu_SelectionEvent(event):
-    global algorithm
-    algorithm = variablealgoritmo.get()
+    #global algorithm
+    clasificadorGlobal = variablealgoritmo.get()
     
-
 
 def OnDoubleClick(event):
     item = tabladenoticias.selection()
@@ -204,15 +203,15 @@ def vistaPrevia(rutaOdio,rutaNoOdio,informacionalgoritmoo):
         LNejemplaresNoOdio=Label(informacionalgoritmo,text=len([name for name in os.listdir(rutaNoOdio)]),font=('Arial',7)).place(relx=0.6,rely=0.4,anchor=W)
     if(rutaOdio!='' and rutaNoOdio!=''):
         LNtotal=Label(informacionalgoritmo,text=(len([name for name in os.listdir(rutaOdio)])+len([name for name in os.listdir(rutaNoOdio)])),font=('Arial',7)).place(relx=0.6,rely=0.6,anchor=W)
-    print(algorithm)
-    Lalgoritmo=Label(informacionalgoritmo,text=algorithm,font=('Arial',7)).place(relx=0.6,rely=0.8,anchor=W)
+    print(clasificadorGlobal)
+    Lalgoritmo=Label(informacionalgoritmo,text=clasificadorGlobal,font=('Arial',7)).place(relx=0.6,rely=0.8,anchor=W)
 
 
     
 def ejecutar(x,rutaOdio,rutaNoOdio,informacionalgoritmo,matrizdisper):
 
     
-
+    
 
 
     global clf
@@ -345,7 +344,10 @@ nb.pack(fill='both',expand=YES)
 p1=ttk.Frame(nb)
 p2=ttk.Frame(nb)
 
-#RutanoticiasOdio=os.getcwd()+"\\Odio"
+global rutaOdioGlobal
+global rutaNoOdioGlobal
+global rutaUnlabelGlobal
+global clasificadorGlobal
 #RutanoticiasNOOdio=os.getcwd()+"\\NoOdio"
 #RutanoticiasUnlabel=os.getcwd()+"\\Unlabeled"
 
@@ -384,7 +386,7 @@ OptionList = [
 
 variablealgoritmo = tk.StringVar(p1)
 variablealgoritmo.set(OptionList[0])
-algorithm = variablealgoritmo.get()
+clasificadorGlobal = variablealgoritmo.get()
 
 
 opt = tk.OptionMenu(p1, variablealgoritmo, *OptionList, command = OptionMenu_SelectionEvent)
