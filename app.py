@@ -17,6 +17,7 @@ from TEST import TEST
 from TRAIN import TRAIN
 import pickle
 from os import remove
+import pandas as pd
 
 
 
@@ -57,9 +58,16 @@ def abrirarchivo(x,Rutanoticiasclasificar,framedelatabla):
     dfTest=ejecutarTest(Rutanoticiasclasificar, loaded_model,dirarchivolistaplabras)
 
 
+    
+    global GuardCSV
+    
+
+
 
 
     tabladenoticias=ttk.Treeview(framedelatabla,columns = ('#1','#2','#3'),show='headings',selectmode ='browse')
+
+    
 
     scroll=Scrollbar(framedelatabla,command=tabladenoticias.yview)
     scroll.pack(side="right", fill="y")
@@ -91,6 +99,15 @@ def abrirarchivo(x,Rutanoticiasclasificar,framedelatabla):
     canvas1.create_arc((2,2,48,48), fill="#ff0000", outline="#ff0000", start=blue, extent = red)
     canvas1.place(relx=0.5,rely=0.8,anchor=CENTER)
 
+
+
+ 
+    GuardCSV=pd.DataFrame(list(zip(dfTest.index, dfTest["CATEGORIA"])),columns =['Name', 'Categoria'])
+
+ 
+    
+
+
     return x
 
 
@@ -108,6 +125,8 @@ def mostrarnoticia():
 
 
     return 0
+
+
 def carpeta(x):
 
     dir=abrir_dir()
@@ -209,7 +228,7 @@ def ejecutarTest(pathUnlabeled, clfloaded,dirarchivolistaplabras):
         listapalabras = text.split("\n")
     
 
-
+    
 
     dfTest=algoritmo.Test(pathUnlabeled, clfloaded,listapalabras)
 
@@ -249,7 +268,33 @@ def guardar(x):
     
     return x,directorio
 
+def guardartest(x,GuardCSV):
 
+
+
+    directorio = filedialog.asksaveasfilename(defaultextension=".joblib",title="Save",filetypes=(("csv", "*.txt"),("all files", "*.*")))
+                    
+
+    x.delete(0,"end")
+    x.insert(0,directorio)
+    x.textvariable=directorio
+    
+
+    Testcsv=GuardCSV.to_csv()
+
+    file = open(directorio, "w")
+
+    file.write(Testcsv)
+    
+
+
+    print(Testcsv)
+
+   
+
+
+    
+    return x,directorio
 
 
 root = Tk()
@@ -405,6 +450,17 @@ Linfo3=Label(informacionalgoritmo2,text="NoOdio:",font=('Arial',7)).place(relx=0
 Bseleccionarmodeloclasificador=Button(p2,text="Modelo",command=lambda:abrirarchivo(Lclasificador,Rutanoticiasclasificar.get(),tablita),state=tk.DISABLED)
 Bseleccionarmodeloclasificador.place(relx=0.9,rely=0.2,anchor=CENTER)
 
+
+Lguardarcsv=Label(p2,text="Guardar csv:").place(relx=0.1,rely=0.9)
+
+
+
+Rdirguardartest = StringVar()
+Lguardardirtest=Entry(p2,text='Ruta',width = 60, textvariable=Rdirguardar)
+Lguardardirtest.place(height=19,relx=0.5,rely=0.925,anchor=CENTER)
+
+BGuardarmodelo=Button(p2,text="Guardar",command=lambda:guardartest(Lguardardirtest,GuardCSV))
+BGuardarmodelo.place(relx=0.9,rely=0.925,anchor=CENTER)
 
 #Linfo4=Label(informacionalgoritmo2,text="Algoritmo seleccionado:",font=('Arial',7)).place(relx=0.1,rely=0.8,anchor=W)
 
