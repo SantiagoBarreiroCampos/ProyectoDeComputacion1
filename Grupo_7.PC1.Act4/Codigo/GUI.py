@@ -385,7 +385,7 @@ OptionList = [
 ] 
 
 variablealgoritmo = tk.StringVar(p1)
-variablealgoritmo.set(OptionList[0])
+variablealgoritmo.set(OptionList[1])
 clasificadorGlobal = variablealgoritmo.get()
 
 
