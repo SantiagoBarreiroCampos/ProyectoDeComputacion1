@@ -10,6 +10,7 @@ from tkinter import Entry
 from tkinter import Frame
 from tkinter import StringVar
 from tkinter import YES
+from tkinter import BOTH
 from tkinter import Label
 from tkinter import filedialog
 from io import open
@@ -26,6 +27,24 @@ def abrir_dir():
     return directorio
 
 
+
+
+def OnDoubleClick(event):
+    item = tabladenoticias.selection()
+    #print('item:', item)
+    #print('event:', event)
+    #item = tabladenoticias.selection()
+    array = tabladenoticias.item(item,"values")
+    #type(array)
+    #print(array[0])
+    #return array[0]
+    abrirNoticia(array[0])
+    
+def abrirNoticia(nombreArchivo):
+    #print(rutaUnlabel)
+    os.startfile(rutaUnlabel+"/"+nombreArchivo)
+    return 0
+
 def abrirarchivo(x,Rutanoticiasclasificar,framedelatabla):
 
     
@@ -35,7 +54,7 @@ def abrirarchivo(x,Rutanoticiasclasificar,framedelatabla):
     global dfTest
     global nombresnoticias
     global noticiasmostrar
-
+    global rutaUnlabel
 
     directorio=filedialog.askopenfile(title="selecciona el modelo")
   
@@ -66,7 +85,7 @@ def abrirarchivo(x,Rutanoticiasclasificar,framedelatabla):
 
 
     tabladenoticias=ttk.Treeview(framedelatabla,columns = ('#1','#2','#3'),show='headings',selectmode ='browse')
-
+    tabladenoticias.pack(expand=YES, fill=BOTH)
     
 
     scroll=Scrollbar(framedelatabla,command=tabladenoticias.yview)
@@ -74,22 +93,32 @@ def abrirarchivo(x,Rutanoticiasclasificar,framedelatabla):
     
     tabladenoticias.configure(yscrollcommand = scroll.set)
     tabladenoticias.heading("#1",text="Noticia")
+    tabladenoticias.column("#1", minwidth=0, width=200, stretch=tk.NO)
     tabladenoticias.heading("#2",text="Categoria")
+    tabladenoticias.column("#2", minwidth=0, width=125, stretch=tk.NO, anchor=tk.CENTER)
     tabladenoticias.heading("#3",text="Ver")
+    tabladenoticias.column("#3", minwidth=0, width=125, stretch=tk.NO, anchor=tk.CENTER)
+    
 
     i=0
     for nombre in dfTest.index:
 
-        tabladenoticias.insert(parent='',index='end',iid=i,values=(nombre,dfTest["CATEGORIA"][i],"ver"))
+        tabladenoticias.insert(parent='',index='end',iid=i,values=(nombre,dfTest["CATEGORIA"][i],"Ver"))
         i=i+1
     tabladenoticias.pack(fill="x")
+    rutaUnlabel = Rutanoticiasclasificar
+    tabladenoticias.bind("<<TreeviewSelect>>", OnDoubleClick) # single click, without "index out of range" error
+
+    nOdio = len([name for name in dfTest['CATEGORIA'] if name == 'Odio'])
+    nNoOdio = len([name for name in dfTest['CATEGORIA'] if name == 'NoOdio'])
+    nTotal = len([name for name in dfTest['CATEGORIA']])
 
 
-    LNtotal=Label(informacionalgoritmo2,text=len([name for name in dfTest['CATEGORIA']]),font=('Arial',7)).place(relx=0.6,rely=0.2,anchor=W)
-    LNejemplaresOdio=Label(informacionalgoritmo2,text=len([name for name in dfTest['CATEGORIA'] if name == 'Odio']),font=('Arial',7)).place(relx=0.6,rely=0.35,anchor=W)
-    LNejemplaresNoOdio=Label(informacionalgoritmo2,text=(len([name for name in dfTest['CATEGORIA'] if name == 'NoOdio'])),font=('Arial',7)).place(relx=0.6,rely=0.50,anchor=W)
+    LNtotal=Label(informacionalgoritmo2,text=nTotal,font=('Arial',7)).place(relx=0.6,rely=0.2,anchor=W)
+    LNejemplaresOdio=Label(informacionalgoritmo2,text=nOdio,font=('Arial',7)).place(relx=0.6,rely=0.35,anchor=W)
+    LNejemplaresNoOdio=Label(informacionalgoritmo2,text=nNoOdio,font=('Arial',7)).place(relx=0.6,rely=0.50,anchor=W)
     
-    n=float(len([name for name in dfTest['CATEGORIA'] if name == 'NoOdio'])*10)
+    n=float((nOdio/nTotal)*100)
            
     canvas1 =tk.Canvas(informacionalgoritmo2, width = 50, height = 50)
     canvas1.pack()
