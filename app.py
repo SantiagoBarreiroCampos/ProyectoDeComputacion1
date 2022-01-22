@@ -26,7 +26,10 @@ def abrir_dir():
     directorio=filedialog.askdirectory(title="selecciona directorio")
     return directorio
 
-
+def OptionMenu_SelectionEvent(event):
+    global algorithm
+    algorithm = variablealgoritmo.get()
+    
 
 
 def OnDoubleClick(event):
@@ -201,7 +204,8 @@ def vistaPrevia(rutaOdio,rutaNoOdio,informacionalgoritmoo):
         LNejemplaresNoOdio=Label(informacionalgoritmo,text=len([name for name in os.listdir(rutaNoOdio)]),font=('Arial',7)).place(relx=0.6,rely=0.4,anchor=W)
     if(rutaOdio!='' and rutaNoOdio!=''):
         LNtotal=Label(informacionalgoritmo,text=(len([name for name in os.listdir(rutaOdio)])+len([name for name in os.listdir(rutaNoOdio)])),font=('Arial',7)).place(relx=0.6,rely=0.6,anchor=W)
-    Lalgoritmo=Label(informacionalgoritmo,text=informacionalgoritmoo,font=('Arial',7)).place(relx=0.6,rely=0.8,anchor=W)
+    print(algorithm)
+    Lalgoritmo=Label(informacionalgoritmo,text=algorithm,font=('Arial',7)).place(relx=0.6,rely=0.8,anchor=W)
 
 
     
@@ -380,19 +384,21 @@ OptionList = [
 
 variablealgoritmo = tk.StringVar(p1)
 variablealgoritmo.set(OptionList[0])
+algorithm = variablealgoritmo.get()
 
 
-
-opt = tk.OptionMenu(p1, variablealgoritmo, *OptionList)
+opt = tk.OptionMenu(p1, variablealgoritmo, *OptionList, command = OptionMenu_SelectionEvent)
 opt.config(width=40)
 opt.place(relx=0.3,rely=0.3,anchor=CENTER)
 
-
 #recuadro con la info
+
+
 
 informacionalgoritmo=Frame(p1)
 informacionalgoritmo.config(width=300,height=130,background="white",relief=tk.FLAT,bd=20,highlightthickness=4) 
 informacionalgoritmo.place(relx=0.3,rely=0.5,anchor=CENTER)
+
 
 Lvistaprevia=Label(informacionalgoritmo,text="VISTA PREVIA:",font=('Arial',9)).place(relx=0.1,rely=0,anchor=CENTER)
 Lvistaprevia1=Label(informacionalgoritmo,text="Ejemplares odio:",font=('Arial',7)).place(relx=0.1,rely=0.2,anchor=W)
