@@ -27,7 +27,7 @@ def abrir_dir():
     return directorio
 
 def OptionMenu_SelectionEvent(event):
-    #global algorithm
+    global clasificadorGlobal
     clasificadorGlobal = variablealgoritmo.get()
     
 
@@ -203,7 +203,7 @@ def vistaPrevia(rutaOdio,rutaNoOdio,informacionalgoritmoo):
         LNejemplaresNoOdio=Label(informacionalgoritmo,text=len([name for name in os.listdir(rutaNoOdio)]),font=('Arial',7)).place(relx=0.6,rely=0.4,anchor=W)
     if(rutaOdio!='' and rutaNoOdio!=''):
         LNtotal=Label(informacionalgoritmo,text=(len([name for name in os.listdir(rutaOdio)])+len([name for name in os.listdir(rutaNoOdio)])),font=('Arial',7)).place(relx=0.6,rely=0.6,anchor=W)
-    print(clasificadorGlobal)
+    #print(clasificadorGlobal)
     Lalgoritmo=Label(informacionalgoritmo,text=clasificadorGlobal,font=('Arial',7)).place(relx=0.6,rely=0.8,anchor=W)
 
 
@@ -211,7 +211,7 @@ def vistaPrevia(rutaOdio,rutaNoOdio,informacionalgoritmoo):
 def ejecutar(x,rutaOdio,rutaNoOdio,informacionalgoritmo,matrizdisper):
 
     
-    
+    vistaPrevia(rutaOdio, rutaNoOdio, informacionalgoritmo)
 
 
     global clf

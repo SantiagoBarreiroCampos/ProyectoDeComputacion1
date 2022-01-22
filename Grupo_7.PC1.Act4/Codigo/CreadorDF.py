@@ -11,7 +11,7 @@ import os
 from nltk.tokenize import RegexpTokenizer
 from nltk.stem.snowball import SnowballStemmer
 from sklearn.feature_extraction.text import TfidfVectorizer
-import pathlib
+#import pathlib
 
 class CreadorDF:
     
@@ -30,11 +30,6 @@ class CreadorDF:
         return noticiasTokenizadas
     
     def removeStopwords(self, noticia):
-
-       
-
-        
-
         with open(os.path.dirname(__file__)+"\\listaParadaEsp.txt") as f:
             text = f.read()
             prohibitedWords = text.split("\n")
