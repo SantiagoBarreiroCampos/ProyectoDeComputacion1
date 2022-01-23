@@ -1,0 +1,19 @@
+Requerimientos de instalación de librerías para poder ejecutar el sistema correctamente.
+
+Instalación de sklearn: 
+	Pip: pip install -U scikit-learn
+	Anaconda:conda create -n sklearn-env -c conda-forge scikit-learn // conda activate sklearn-env
+
+Instalación de nltk: 
+	Pip: pip3 install nltk
+	Anaconda: conda install -c anaconda nltk
+
+Tras haber instalado ntk se deben descargar los packages ejecutando los siguientes comandos desde un interpreter de python:
+	import nltk
+	nltk.download ()
+
+Instalación de pandas:
+	Pip: pip install pandas
+	Anaconda: viene instalado por defecto
+
+Las librerías tkinter y pickle forman parte de las librerías standard de python
