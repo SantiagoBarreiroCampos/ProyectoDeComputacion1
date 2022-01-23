@@ -172,19 +172,6 @@ def carpeta(x):
     
     return x,dir
 
-def carpetaTEST(x):
-
-    dir=abrir_dir()
-    x.delete(0,"end")
-    x.insert(0,dir)
-    x.textvariable=dir
-
-    global listanoticiasunlabeled
-    listanoticiasunlabeled=dir
-
-
-    
-    return x,dir
 
 def activarbtn(Bseleccionarmodeloclasificador):
 
