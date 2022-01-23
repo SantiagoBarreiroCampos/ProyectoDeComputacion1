@@ -304,7 +304,7 @@ def guardartest(x,GuardCSV):
 
 
 
-    directorio = filedialog.asksaveasfilename(defaultextension=".joblib",title="Save",filetypes=(("csv", "*.txt"),("all files", "*.*")))
+    directorio = filedialog.asksaveasfilename(defaultextension=".joblib",title="Save",filetypes=(("csv", "*.csv"),("all files", "*.*")))
                     
 
     x.delete(0,"end")
