@@ -144,18 +144,7 @@ def abrirarchivo(x,Rutanoticiasclasificar,framedelatabla):
 
   
 
-def mostrarnoticia():
 
-
-
-    noticia='''Toplevel()'''
-    noticia.title("APP CLASIFICADORA")
-
-    noticia.geometry('740x500')
-    noticia.resizable(1,1)
-
-
-    return 0
 
 
 def carpeta(x):
@@ -171,6 +160,7 @@ def carpeta(x):
 
     
     return x,dir
+
 
 
 def activarbtn(Bseleccionarmodeloclasificador):
