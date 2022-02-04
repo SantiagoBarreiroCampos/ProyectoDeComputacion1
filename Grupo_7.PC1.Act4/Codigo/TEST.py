@@ -14,16 +14,19 @@ class TEST:
         return tablaTest
     
     def Test(self, pathUnlabeled, algoritmo, listapalabras):
-        
+        #crear df test
         dfTest = self.dataFrameTest(pathUnlabeled, listapalabras)
         
         categorias = []
+        #algoritmo.predict =clf.predict
         for categoria in algoritmo.predict(dfTest):
             if categoria == 1:
                 categorias.append("Odio")
             elif categoria == 0:
                 categorias.append("NoOdio")
-                
+        
+
+        #insertar en la columna 0
         dfTest.insert(0, "CATEGORIA", categorias, True)
         #print(dfTest)
         return dfTest

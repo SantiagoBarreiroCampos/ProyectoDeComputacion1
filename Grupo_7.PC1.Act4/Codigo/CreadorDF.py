@@ -14,7 +14,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 #import pathlib
 
 class CreadorDF:
-    
+    #pasar a minusculas
     def noticiasLower(self, arrayNoticias):
         noticiaslower = []
         for noticia in arrayNoticias:
@@ -42,12 +42,17 @@ class CreadorDF:
     
     
     def creadorDFTest(self, pathUnlabeled, listapalabras):
-        files = os.listdir(pathUnlabeled)
-        arrayNoticias = []
         
+        files = os.listdir(pathUnlabeled)
+        #file=array de nombres de noticias
+        arrayNoticias = []
+        #lo recorro
         for file in files:
+            #guardo cada ruta
             file_path = os.path.join(pathUnlabeled, file)
+           #compruebo q es un archivo 
             if os.path.isfile(file_path):
+                #lo abro 
                 with open(file_path, 'r', encoding="ISO 8859-1") as f:
                     
                     fileread = f.read()
@@ -55,7 +60,8 @@ class CreadorDF:
                     #juntar title y content
                     content=splitedcontent[3]+" "+splitedcontent[4]+" "+splitedcontent[5]
                     arrayNoticias.append(content)
-                    
+        
+        #tratamos el texto
         arrayNoticias = self.noticiasLower(arrayNoticias)
         arrayNoticias = self.tokenize(arrayNoticias)
         
@@ -67,9 +73,9 @@ class CreadorDF:
         for noticia in noticiasSinStop:
             noticiasStem.append(self.stemming(noticia))
         #print(noticiasStem[0])
-        
+        #declaramos vectoricer
         vectorizer = TfidfVectorizer()
-        vectorizer.fit(listapalabras) # aqui se introduce la lista de palabras
+        vectorizer.fit(listapalabras) # aqui se introduce la lista de palabras le damos forma
         vectorNoticias = vectorizer.transform(noticiasStem)
         palabras = vectorizer.get_feature_names()
         array = vectorNoticias.toarray()
@@ -85,6 +91,9 @@ class CreadorDF:
         filesNoOdio = os.listdir(pathNoOdio)
         files = filesOdio+filesNoOdio
         arrayNoticias = []
+
+#las noticias al mismo array
+        
         for file in filesOdio:
             file_path = os.path.join(pathOdio, file)
             if os.path.isfile(file_path):

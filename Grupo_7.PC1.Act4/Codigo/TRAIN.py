@@ -24,6 +24,7 @@ class TRAIN:
         return tablaTrain, palabras
     
     def EntrenarSVM(self, dfEntrenamiento):
+
         X = dfEntrenamiento.drop(columns="CATEGORIA")
         y = dfEntrenamiento.iloc[:, 0]
         
@@ -53,12 +54,14 @@ class TRAIN:
         return gnb, matriz, precision
     
     def EntrenarDecisionTree(self, dfEntrenamiento):
+
+        #elimina la columna categoria
         X = dfEntrenamiento.drop(columns="CATEGORIA")
+
+        #guarda solo la categora
         y = dfEntrenamiento.iloc[:, 0]
         
-        X_train, X_test, y_train, y_test = train_test_split(X, y, 
-                                                            test_size=0.4, 
-                                                            random_state=0)
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_state=0)
         
         clf = tree.DecisionTreeClassifier().fit(X_train, y_train)
         matriz = confusion_matrix(y_test, clf.predict(X_test))
